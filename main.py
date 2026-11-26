@@ -22,10 +22,6 @@ def calculate_sequence_length(sequence):
     return len(sequence)
 
 
-sequences = read_fasta("example.fasta")
-
-
-
 def calculate_gc_content(sequence):
     sequence = sequence.upper()
 
@@ -38,13 +34,79 @@ def calculate_gc_content(sequence):
 
     return gc_percentage
 
+
+def count_nucleotides(sequence):
+    sequence = sequence.upper()
+
+    nucleotide_counts = {
+        "A": sequence.count("A"),
+        "T": sequence.count("T"),
+        "G": sequence.count("G"),
+        "C": sequence.count("C"),
+        "N": sequence.count("N")
+    }
+
+    return nucleotide_counts
+
+
+# Read FASTA file
 sequences = read_fasta("example.fasta")
 
+# Initialize total statistics
+total_counts = {
+    "A": 0,
+    "T": 0,
+    "G": 0,
+    "C": 0,
+    "N": 0
+}
+
+total_length = 0
+
+# Analyze individual sequences
 for name, sequence in sequences.items():
+
     length = calculate_sequence_length(sequence)
     gc_content = calculate_gc_content(sequence)
+    nucleotide_counts = count_nucleotides(sequence)
 
+    print("=" * 32)
     print("Sequence:", name)
+    print("=" * 32)
+
     print("Length:", length, "bp")
-    print("GC content:", f"{gc_content:.2f}%")
-    print()
+    print(f"GC content: {gc_content:.2f}%")
+
+    print("\nNucleotide counts:")
+
+    for nucleotide, count in nucleotide_counts.items():
+        print(f"{nucleotide}: {count}")
+
+    total_length += length
+
+    for nucleotide in total_counts:
+        total_counts[nucleotide] += nucleotide_counts[nucleotide]
+
+
+# Display combined summary
+print("\n" + "=" * 32)
+print("TOTAL SUMMARY")
+print("=" * 32)
+
+print("Number of sequences:", len(sequences))
+print("Total length:", total_length, "bp")
+
+print("\nTotal nucleotide counts:")
+
+for nucleotide, count in total_counts.items():
+    print(f"{nucleotide}: {count}")
+
+if total_length > 0:
+    total_gc = (
+        (total_counts["G"] + total_counts["C"])
+        / total_length
+    ) * 100
+else:
+    total_gc = 0.0
+
+print(f"\nOverall GC content: {total_gc:.2f}%")
