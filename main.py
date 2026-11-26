@@ -1,5 +1,5 @@
-def read_fasta(filename):
 
+def read_fasta(filename):
     sequences = {}
 
     with open(filename, "r") as file:
@@ -18,8 +18,15 @@ def read_fasta(filename):
     return sequences
 
 
+def calculate_sequence_length(sequence):
+    return len(sequence)
+
+
 sequences = read_fasta("example.fasta")
 
 for name, sequence in sequences.items():
-    print(name)
-    print(sequence)
+    length = calculate_sequence_length(sequence)
+
+    print("Sequence:", name)
+    print("Length:", length, "bp")
+    print()
