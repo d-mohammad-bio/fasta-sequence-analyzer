@@ -1,4 +1,18 @@
 
+import argparse
+
+
+parser = argparse.ArgumentParser(
+    description="Analyze DNA sequences from a FASTA file."
+)
+
+parser.add_argument(
+    "filename",
+    help="Path to the FASTA file you want to analyze"
+)
+
+args = parser.parse_args()
+
 def read_fasta(filename):
     sequences = {}
 
@@ -50,7 +64,7 @@ def count_nucleotides(sequence):
 
 
 # Read FASTA file
-sequences = read_fasta("example.fasta")
+sequences = read_fasta(args.filename)
 
 # Initialize total statistics
 total_counts = {
