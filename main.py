@@ -152,7 +152,19 @@ def count_iupac_codes(sequence):
     return iupac_counts
 
 # Read FASTA file
-sequences, invalid_sequences = read_fasta(args.filename)
+
+try:
+    sequences, invalid_sequences = read_fasta(args.filename)
+
+except FileNotFoundError as error:
+    print(f"\nERROR: {error}")
+    print("Please check the file path and try again.")
+    raise SystemExit(1)
+
+except ValueError as error:
+    print(f"\nERROR: {error}")
+    print("Please provide a valid FASTA file.")
+    raise SystemExit(1)
 
 if invalid_sequences:
     print("\nWARNING: Some sequences were skipped.")
@@ -161,7 +173,9 @@ if invalid_sequences:
         print(f"{name}: {error}")
 
 if not sequences:
-    raise ValueError("No valid sequences available for analysis.")
+    print("\nERROR: No valid sequences available for analysis.")
+    print("Please check your FASTA file and try again.")
+    raise SystemExit(1)
 
 # Initialize total statistics
 total_counts = {
